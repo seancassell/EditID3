@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="EditID3.cpp" />
+    <ClCompile Include="frame.cpp" />
+    <ClCompile Include="header.cpp" />
+    <ClCompile Include="id3v2lib.cpp" />
+    <ClCompile Include="types.cpp" />
+    <ClCompile Include="utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EditID3.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="id3v2lib.hpp" />
+    <ClInclude Include="id3v2lib\constants.hpp">
+      <Filter>id3v2lib</Filter>
+    </ClInclude>
+    <ClInclude Include="id3v2lib\frame.hpp">
+      <Filter>id3v2lib</Filter>
+    </ClInclude>
+    <ClInclude Include="id3v2lib\header.hpp">
+      <Filter>id3v2lib</Filter>
+    </ClInclude>
+    <ClInclude Include="id3v2lib\types.hpp">
+      <Filter>id3v2lib</Filter>
+    </ClInclude>
+    <ClInclude Include="id3v2lib\utils.hpp">
+      <Filter>id3v2lib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="id3v2lib">
+      <UniqueIdentifier>{a4ee97ea-533b-4c07-9b0c-cef0eb61aaac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
