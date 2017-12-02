@@ -1,3 +1,6 @@
+#ifndef EDITID3_PCH_H
+#define EDITID3_PCH_H
+
 /* ==== C++ Standard Library headers: ==== */
 #include <algorithm>
 #include <cerrno>
@@ -27,3 +30,5 @@
 #include <unistd.h>
 #include <sys/resource.h>
 #include <android/log.h>
+
+#endif // EDITID3_PCH_H
