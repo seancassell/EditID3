@@ -7,6 +7,7 @@
     <ClCompile Include="id3v2lib.cpp" />
     <ClCompile Include="types.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="TypeClasses.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditID3.h" />
@@ -25,6 +26,9 @@
       <Filter>id3v2lib</Filter>
     </ClInclude>
     <ClInclude Include="id3v2lib\utils.hpp">
+      <Filter>id3v2lib</Filter>
+    </ClInclude>
+    <ClInclude Include="id3v2lib\TypeClasses.hpp">
       <Filter>id3v2lib</Filter>
     </ClInclude>
   </ItemGroup>

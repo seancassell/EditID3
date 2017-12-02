@@ -201,6 +201,7 @@
     <ClCompile Include="frame.cpp" />
     <ClCompile Include="header.cpp" />
     <ClCompile Include="id3v2lib.cpp" />
+    <ClCompile Include="TypeClasses.cpp" />
     <ClCompile Include="types.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
@@ -210,6 +211,7 @@
     <ClInclude Include="id3v2lib\constants.hpp" />
     <ClInclude Include="id3v2lib\frame.hpp" />
     <ClInclude Include="id3v2lib\header.hpp" />
+    <ClInclude Include="id3v2lib\TypeClasses.hpp" />
     <ClInclude Include="id3v2lib\types.hpp" />
     <ClInclude Include="id3v2lib\utils.hpp" />
     <ClInclude Include="pch.h" />
