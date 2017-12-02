@@ -17,9 +17,9 @@ uint32_t convertBytesToInteger(char* Bytes, size_t Size, int32_t Offset);
 char* convertIntegerToBytes(int32_t Integer);
 int32_t syncintEncode(int32_t Value);
 int32_t syncintDecode(int32_t Value);
-void addToList(ID3v2_frame_list* List, ID3v2_frame* Frame);
-ID3v2_frame* getFromList(ID3v2_frame_list* List, char* FrameId);
-void freeTag(ID3v2_tag* Tag);
+void addToList(ID3v2FrameList* List, ID3v2Frame* Frame);
+ID3v2Frame* getFromList(ID3v2FrameList* List, char* FrameId);
+void freeTag(ID3v2Tag* Tag);
 char* getMimeTypeFromFilename(const std::string* Filename);
 
 // String functions:

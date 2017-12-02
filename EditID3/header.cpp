@@ -64,16 +64,16 @@ ID3v2Header* getTagHeaderWithBuffer (char* Buffer, size_t Length) {
 
 	TagHeader->MajorVersion = Buffer[Position += ID3_HEADER_TAG];
 	TagHeader->MinorVersion = Buffer[Position += ID3_HEADER_VERSION];
-	TagHeader->flags = Buffer[Position += ID3_HEADER_REVISION];
-	TagHeader->tag_size = syncintDecode(convertBytesToInteger(Buffer, ID3_HEADER_SIZE, Position += ID3_HEADER_FLAGS));
+	TagHeader->Flags = Buffer[Position += ID3_HEADER_REVISION];
+	TagHeader->TagSize = syncintDecode(convertBytesToInteger(Buffer, ID3_HEADER_SIZE, Position += ID3_HEADER_FLAGS));
 
-	if ((TagHeader->flags & (1 << 6)) == (1 << 6)) {
+	if ((TagHeader->Flags & (1 << 6)) == (1 << 6)) {
 		// An extended header exists, so we retrieve the actual size of it and
 		// save it into the struct:
-		TagHeader->extended_header_size = syncintDecode(convertBytesToInteger(Buffer, ID3_EXTENDED_HEADER_SIZE, Position += ID3_HEADER_SIZE));
+		TagHeader->ExtendedHeaderSize = syncintDecode(convertBytesToInteger(Buffer, ID3_EXTENDED_HEADER_SIZE, Position += ID3_HEADER_SIZE));
 	} else {
 		// No extended header existing:
-		TagHeader->extended_header_size = 0;
+		TagHeader->ExtendedHeaderSize = 0;
 	}
 
 	return TagHeader;
@@ -91,6 +91,6 @@ int32_t getTagVersion (ID3v2Header* TagHeader) {
 }
 
 
-void editTagSize (ID3v2_tag* Tag) {
+void editTagSize (ID3v2Tag* Tag) {
 	// TODO: This function needs to be implemented
 }

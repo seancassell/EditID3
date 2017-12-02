@@ -75,49 +75,49 @@ int32_t syncintDecode (int32_t Value) {
 }
 
 
-void addToList (ID3v2_frame_list* Main, ID3v2_frame* Frame) {
-	ID3v2_frame_list *Current;
+void addToList (ID3v2FrameList* Main, ID3v2Frame* Frame) {
+	ID3v2FrameList *Current;
 
 	// If empty list:
-	if (Main->start == NULL) {
-		Main->start = Main;
-		Main->last = Main;
-		Main->frame = Frame;
+	if (Main->Start == NULL) {
+		Main->Start = Main;
+		Main->Last = Main;
+		Main->Frame = Frame;
 	} else {
 		Current = initNewFrameList();
-		Current->frame = Frame;
-		Current->start = Main->start;
-		Main->last->next = Current;
-		Main->last = Current;
+		Current->Frame = Frame;
+		Current->Start = Main->Start;
+		Main->Last->Next = Current;
+		Main->Last = Current;
 	}
 }
 
 
-ID3v2_frame* getFromList (ID3v2_frame_list* List, char* FrameID) {
-	while ((List != NULL) && (List->frame != NULL)) {
-		if (strncmp(List->frame->frame_id, FrameID, 4) == 0) {
-			return List->frame;
+ID3v2Frame* getFromList (ID3v2FrameList* List, char* FrameID) {
+	while ((List != NULL) && (List->Frame != NULL)) {
+		if (strncmp(List->Frame->FrameID, FrameID, 4) == 0) {
+			return List->Frame;
 		}
-		List = List->next;
+		List = List->Next;
 	}
 	return NULL;
 }
 
 
-void freeTag (ID3v2_tag* Tag) {
-	ID3v2_frame_list *List;
+void freeTag (ID3v2Tag* Tag) {
+	ID3v2FrameList *List;
 
-	free(Tag->raw);
-	free(Tag->tag_header);
-	List = Tag->frames;
+	free(Tag->Raw);
+	free(Tag->TagHeader);
+	List = Tag->Frames;
 
 	while (List != NULL) {
-		if (List->frame) {
-			free(List->frame->data);
+		if (List->Frame) {
+			free(List->Frame->Data);
 		}
 
-		free(List->frame);
-		List = List->next;
+		free(List->Frame);
+		List = List->Next;
 	}
 
 	free(List);
@@ -178,10 +178,10 @@ void printLineUTF16(uint16_t* String, size_t Size) {
 char* getPathToFile(std::string* Filename) {
 	const char* file = Filename->c_str();
 	char* FileName = strrchr(Filename->c_str(), '/');
-	size_t size = strlen(Filename->c_str()) - strlen(FileName) + 1; // 1 = trailing '/'
+	size_t Size = strlen(Filename->c_str()) - strlen(FileName) + 1; // 1 = trailing '/'
 
-	char* file_path = (char*) malloc(size * sizeof(char));
-	strncpy(file_path, file, size);
+	char* file_path = (char*) malloc(Size * sizeof(char));
+	strncpy(file_path, file, Size);
 
 	return file_path;
 }

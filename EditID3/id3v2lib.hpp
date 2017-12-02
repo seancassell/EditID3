@@ -21,39 +21,39 @@ extern "C" {
 #include "id3v2lib/utils.hpp"
 
 
-	ID3v2_tag* loadTag(const std::string* Filename);
-	ID3v2_tag* loadTagWithBuffer(char* Bytes, size_t Length);
+	ID3v2Tag* loadTag(const std::string* Filename);
+	ID3v2Tag* loadTagWithBuffer(char* Bytes, size_t Length);
 	void removeTag(const std::string* Filename);
-	void setTag(const std::string* Filename, ID3v2_tag* Tag);
+	void setTag(const std::string* Filename, ID3v2Tag* Tag);
 
 
 	// Getter functions:
-	ID3v2_frame* getTagTitle(ID3v2_tag* Tag);
-	ID3v2_frame* getTagArtist(ID3v2_tag* Tag);
-	ID3v2_frame* getTagAlbum(ID3v2_tag* Tag);
-	ID3v2_frame* getTagAlbumArtist(ID3v2_tag* Tag);
-	ID3v2_frame* getTagGenre(ID3v2_tag* Tag);
-	ID3v2_frame* getTagTrack(ID3v2_tag* Tag);
-	ID3v2_frame* getTagYear(ID3v2_tag* Tag);
-	ID3v2_frame* getTagComment(ID3v2_tag* Tag);
-	ID3v2_frame* getTagDiscNumber(ID3v2_tag* Tag);
-	ID3v2_frame* getTagComposer(ID3v2_tag* Tag);
-	ID3v2_frame* getTagAlbumCover(ID3v2_tag* Tag);
+	ID3v2Frame* getTagTitle(ID3v2Tag* Tag);
+	ID3v2Frame* getTagArtist(ID3v2Tag* Tag);
+	ID3v2Frame* getTagAlbum(ID3v2Tag* Tag);
+	ID3v2Frame* getTagAlbumArtist(ID3v2Tag* Tag);
+	ID3v2Frame* getTagGenre(ID3v2Tag* Tag);
+	ID3v2Frame* getTagTrack(ID3v2Tag* Tag);
+	ID3v2Frame* getTagYear(ID3v2Tag* Tag);
+	ID3v2Frame* getTagComment(ID3v2Tag* Tag);
+	ID3v2Frame* getTagDiscNumber(ID3v2Tag* Tag);
+	ID3v2Frame* getTagComposer(ID3v2Tag* Tag);
+	ID3v2Frame* getTagAlbumCover(ID3v2Tag* Tag);
 
 
 	// Setter functions:
-	void setTagTitle(char* Title, char Encoding, ID3v2_tag* Tag);
-	void setTagArtist(char* Artist, char Encoding, ID3v2_tag* Tag);
-	void setTagAlbum(char* Album, char Encoding, ID3v2_tag* Tag);
-	void setTagAlbumArtist(char* AlbumArtist, char Encoding, ID3v2_tag* Tag);
-	void setTagGenre(char* Genre, char Encoding, ID3v2_tag* Tag);
-	void setTagTrack(char* Track, char Encoding, ID3v2_tag* Tag);
-	void setTagYear(char* Year, char Encoding, ID3v2_tag* Tag);
-	void setTagComment(char* Comment, char Encoding, ID3v2_tag* Tag);
-	void setTagDiscNumber(char* DiscNumber, char Encoding, ID3v2_tag* Tag);
-	void setTagComposer(char* Composer, char Encoding, ID3v2_tag* Tag);
-	void setTagAlbumCover(const std::string* Filename, ID3v2_tag* Tag);
-	void setTagAlbumCoverFromBytes(char* AlbumCoverBytes, char* MIME_Type, size_t PictureSize, ID3v2_tag* Tag);
+	void setTagTitle(char* Title, char Encoding, ID3v2Tag* Tag);
+	void setTagArtist(char* Artist, char Encoding, ID3v2Tag* Tag);
+	void setTagAlbum(char* Album, char Encoding, ID3v2Tag* Tag);
+	void setTagAlbumArtist(char* AlbumArtist, char Encoding, ID3v2Tag* Tag);
+	void setTagGenre(char* Genre, char Encoding, ID3v2Tag* Tag);
+	void setTagTrack(char* Track, char Encoding, ID3v2Tag* Tag);
+	void setTagYear(char* Year, char Encoding, ID3v2Tag* Tag);
+	void setTagComment(char* Comment, char Encoding, ID3v2Tag* Tag);
+	void setTagDiscNumber(char* DiscNumber, char Encoding, ID3v2Tag* Tag);
+	void setTagComposer(char* Composer, char Encoding, ID3v2Tag* Tag);
+	void setTagAlbumCover(const std::string* Filename, ID3v2Tag* Tag);
+	void setTagAlbumCoverFromBytes(char* AlbumCoverBytes, char* MIME_Type, size_t PictureSize, ID3v2Tag* Tag);
 
 
 #ifdef __cplusplus

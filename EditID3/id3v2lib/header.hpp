@@ -20,6 +20,6 @@ bool __hasID3v2Tag(char* RawHeader);
 ID3v2Header* getTagHeader(const std::string* Filename);
 ID3v2Header* getTagHeaderWithBuffer(char* Buffer, size_t Length);
 int32_t getTagVersion(ID3v2Header* TagHeader);
-void editTagSize(ID3v2_tag* Tag);
+void editTagSize(ID3v2Tag* Tag);
 
 #endif // ID3V2LIB_HEADER_HPP

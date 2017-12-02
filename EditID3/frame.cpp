@@ -13,29 +13,29 @@
 #include "id3v2lib/constants.hpp"
 
 
-ID3v2_frame* parseFrame (char* Bytes, int32_t Offset, int32_t Version) {
-	ID3v2_frame* Frame = initNewFrame();
+ID3v2Frame* parseFrame (char* Bytes, int32_t Offset, int32_t Version) {
+	ID3v2Frame* Frame = initNewFrame();
 
 	// Parse frame header:
-	memcpy(Frame->frame_id, (Bytes + Offset), ID3_FRAME_ID);
+	memcpy(Frame->FrameID, (Bytes + Offset), ID3_FRAME_ID);
 	
 	// Check if we are into padding:
-	if (memcmp(Frame->frame_id, "\0\0\0\0", 4) == 0) {
+	if (memcmp(Frame->FrameID, "\0\0\0\0", 4) == 0) {
 		free(Frame);
 		return NULL;
 	}
 
-	Frame->size = convertBytesToInteger(Bytes, 4, (Offset += ID3_FRAME_ID));
+	Frame->Size = convertBytesToInteger(Bytes, 4, (Offset += ID3_FRAME_ID));
 
 	if (Version == ID3v24) {
-		Frame->size = syncintDecode(Frame->size);
+		Frame->Size = syncintDecode(Frame->Size);
 	}
 
-	memcpy(Frame->flags, Bytes + (Offset += ID3_FRAME_SIZE), 2);
+	memcpy(Frame->Flags, Bytes + (Offset += ID3_FRAME_SIZE), 2);
 
 	// Load frame data:
-	Frame->data = (char*) malloc(Frame->size * sizeof(char));
-	memcpy(Frame->data, Bytes + (Offset += ID3_FRAME_FLAGS), Frame->size);
+	Frame->Data = (char*) malloc(Frame->Size * sizeof(char));
+	memcpy(Frame->Data, Bytes + (Offset += ID3_FRAME_FLAGS), Frame->Size);
 
 	return Frame;
 }
@@ -55,38 +55,38 @@ int32_t getFrameType (char* FrameID) {
 }
 
 
-ID3v2FrameTextContent* parseTextFrameContent (ID3v2_frame* Frame) {
+ID3v2FrameTextContent* parseTextFrameContent (ID3v2Frame* Frame) {
 	ID3v2FrameTextContent* Content;
 
 	if (Frame == NULL) {
 		return NULL;
 	}
 
-	Content = initNewTextContent(Frame->size);
-	Content->encoding = Frame->data[0];
-	Content->size = (Frame->size - ID3_FRAME_ENCODING);
-	memcpy(Content->data, (Frame->data + ID3_FRAME_ENCODING), Content->size);
+	Content = initNewTextContent(Frame->Size);
+	Content->Encoding = Frame->Data[0];
+	Content->Size = (Frame->Size - ID3_FRAME_ENCODING);
+	memcpy(Content->Data, (Frame->Data + ID3_FRAME_ENCODING), Content->Size);
 
 	return Content;
 }
 
 
-ID3v2_frame_comment_content* parseCommentFrameContent (ID3v2_frame* Frame) {
-	ID3v2_frame_comment_content *Content;
+ID3v2FrameCommentContent* parseCommentFrameContent (ID3v2Frame* Frame) {
+	ID3v2FrameCommentContent *Content;
 	
 	if (Frame == NULL) {
 		return NULL;
 	}
 
-	Content = initNewCommentContent(Frame->size);
+	Content = initNewCommentContent(Frame->Size);
 
-	Content->text->encoding = Frame->data[0];
-	Content->text->size = (Frame->size - ID3_FRAME_ENCODING - ID3_FRAME_LANGUAGE - ID3_FRAME_SHORT_DESCRIPTION);
-	memcpy(Content->language, (Frame->data + ID3_FRAME_ENCODING), ID3_FRAME_LANGUAGE);
+	Content->Text->Encoding = Frame->Data[0];
+	Content->Text->Size = (Frame->Size - ID3_FRAME_ENCODING - ID3_FRAME_LANGUAGE - ID3_FRAME_SHORT_DESCRIPTION);
+	memcpy(Content->Language, (Frame->Data + ID3_FRAME_ENCODING), ID3_FRAME_LANGUAGE);
 	
 	// Ignore short description:
-	Content->short_description = "\0";
-	memcpy(Content->text->data, Frame->data + ID3_FRAME_ENCODING + ID3_FRAME_LANGUAGE + 1, Content->text->size);
+	Content->ShortDescription = "\0";
+	memcpy(Content->Text->Data, Frame->Data + ID3_FRAME_ENCODING + ID3_FRAME_LANGUAGE + 1, Content->Text->Size);
 
 	return Content;
 }
@@ -106,8 +106,8 @@ static char* parseMimeType (char* Data, int32_t* I) {
 }
 
 
-ID3v2_frame_apic_content* parseApicFrameContent (ID3v2_frame* Frame) {
-	ID3v2_frame_apic_content *Content;
+ID3v2FrameApicContent* parseApicFrameContent (ID3v2Frame* Frame) {
+	ID3v2FrameApicContent *Content;
 	
 	// Skip ID3_FRAME_ENCODING:
 	int32_t i = 1;
@@ -118,25 +118,25 @@ ID3v2_frame_apic_content* parseApicFrameContent (ID3v2_frame* Frame) {
 
 	Content = initNewApicContent();
 
-	Content->encoding = Frame->data[0];
+	Content->Encoding = Frame->Data[0];
 
-	Content->mime_type = parseMimeType(Frame->data, &i);
-	Content->picture_type = Frame->data[++i];
-	Content->description = &Frame->data[++i];
+	Content->MimeType = parseMimeType(Frame->Data, &i);
+	Content->PictureType = Frame->Data[++i];
+	Content->Description = &Frame->Data[++i];
 
-	if ((Content->encoding == 0x01) || (Content->encoding == 0x02)) {
+	if ((Content->Encoding == 0x01) || (Content->Encoding == 0x02)) {
 		// Skip UTF-16 description:
-		for (; *(uint16_t *) (Frame->data + i); i += 2);
+		for (; *(uint16_t *) (Frame->Data + i); i += 2);
 		i += 2;
 	} else {
 		// Skip UTF-8 or Latin-1 description:
-		for (; Frame->data[i] != '\0'; ++i);
+		for (; Frame->Data[i] != '\0'; ++i);
 		++i;
 	}
 
-	Content->picture_size = Frame->size - i;
-	Content->data = (char*) malloc(Content->picture_size);
-	memcpy(Content->data, Frame->data + i, Content->picture_size);
+	Content->PictureSize = Frame->Size - i;
+	Content->Data = (char*) malloc(Content->PictureSize);
+	memcpy(Content->Data, Frame->Data + i, Content->PictureSize);
 
 	return Content;
 }
