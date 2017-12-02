@@ -14,10 +14,11 @@
 #include "constants.hpp"
 
 
-ID3v2_frame* parse_frame(char* Bytes, int32_t Offset, int32_t Version);
-int32_t get_frame_type(char* FrameID);
-ID3v2_frame_text_content* parse_text_frame_content(ID3v2_frame* Frame);
-ID3v2_frame_comment_content* parse_comment_frame_content(ID3v2_frame* Frame);
-ID3v2_frame_apic_content* parse_apic_frame_content(ID3v2_frame* Frame);
+ID3v2_frame* parseFrame(char* Bytes, int32_t Offset, int32_t Version);
+int32_t getFrameType(char* FrameID);
+ID3v2FrameTextContent* parseTextFrameContent(ID3v2_frame* Frame);
+ID3v2_frame_comment_content* parseCommentFrameContent(ID3v2_frame* Frame);
+static char* parseMimeType (char* Data, int32_t* I);
+ID3v2_frame_apic_content* parseApicFrameContent(ID3v2_frame* Frame);
 
 #endif // ID3V2LIB_FRAME_HPP

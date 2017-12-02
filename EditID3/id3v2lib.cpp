@@ -18,7 +18,7 @@ ID3v2_tag* loadTag (const std::string* Filename) {
 	ID3v2_tag *Tag;
 
 	// Get header size:
-	ID3v2_header *TagHeader = get_tag_header(Filename);
+	ID3v2Header *TagHeader = getTagHeader(Filename);
 	if (TagHeader == NULL) {
 		return NULL;
 	}
@@ -57,17 +57,17 @@ ID3v2_tag* loadTagWithBuffer (char* Bytes, size_t Length) {
 	ID3v2_frame *Frame;
 	int32_t Offset = 0;
 	ID3v2_tag* Tag;
-	ID3v2_header* TagHeader;
+	ID3v2Header* TagHeader;
 
 	// Initialization:
-	TagHeader = get_tag_header_with_buffer(Bytes, Length);
+	TagHeader = getTagHeaderWithBuffer(Bytes, Length);
 
 	if (TagHeader == NULL) {
 		// No valid header found:
 		return NULL;
 	}
 
-	if (get_tag_version(TagHeader) == NO_COMPATIBLE_TAG) {
+	if (getTagVersion(TagHeader) == NO_COMPATIBLE_TAG) {
 		// No supported ID3 tag found:
 		free(TagHeader);
 		return NULL;
@@ -80,7 +80,7 @@ ID3v2_tag* loadTagWithBuffer (char* Bytes, size_t Length) {
 		return NULL;
 	}
 
-	Tag = new_tag();
+	Tag = initNewTag();
 
 	// Assignment:
 	Tag->tag_header = TagHeader;
@@ -99,7 +99,7 @@ ID3v2_tag* loadTagWithBuffer (char* Bytes, size_t Length) {
 	// provides more bytes than needed to this function
 
 	while (Offset < TagHeader->tag_size) {
-		Frame = parse_frame(Tag->raw, Offset, get_tag_version(TagHeader));
+		Frame = parseFrame(Tag->raw, Offset, getTagVersion(TagHeader));
 
 		if (Frame != NULL) {
 			Offset += (Frame->size + 10);
@@ -117,12 +117,12 @@ void removeTag (const std::string* Filename) {
 	int32_t c = 0;
 	FILE* File;
 	FILE* TempFile;
-	ID3v2_header* TagHeader;
+	ID3v2Header* TagHeader;
 
 	File = fopen(Filename->c_str(), "r+b");
 	TempFile = tmpfile();
 
-	TagHeader = get_tag_header(Filename);
+	TagHeader = getTagHeader(Filename);
 	if (TagHeader == NULL) {
 		return;
 	}
@@ -142,10 +142,10 @@ void removeTag (const std::string* Filename) {
 }
 
 
-void writeHeader (ID3v2_header* TagHeader, FILE* File) {
+void writeHeader (ID3v2Header* TagHeader, FILE* File) {
 	fwrite("ID3", 3, 1, File);
-	fwrite(&TagHeader->major_version, 1, 1, File);
-	fwrite(&TagHeader->minor_version, 1, 1, File);
+	fwrite(&TagHeader->MajorVersion, 1, 1, File);
+	fwrite(&TagHeader->MinorVersion, 1, 1, File);
 	fwrite(&TagHeader->flags, 1, 1, File);
 	fwrite(convertIntegerToBytes(syncintEncode(TagHeader->tag_size)), 4, 1, File);
 }
@@ -161,7 +161,7 @@ void writeFrame (ID3v2_frame* Frame, FILE* File) {
 
 size_t getTagSize (ID3v2_tag* Tag) {
 	size_t Size = 0;
-	ID3v2_frame_list* FrameList = new_frame_list();
+	ID3v2_frame_list* FrameList = initNewFrameList();
 
 	if (Tag->frames == NULL) {
 		return Size;
@@ -194,10 +194,10 @@ void setTag (const std::string* Filename, ID3v2_tag* Tag) {
 	OldSize = Tag->tag_header->tag_size;
 
 	// Set the new tag header:
-	Tag->tag_header = new_header();
-	memcpy(Tag->tag_header->tag, "ID3", 3);
-	Tag->tag_header->major_version = '\x03';
-	Tag->tag_header->minor_version = '\x00';
+	Tag->tag_header = initNewHeader();
+	memcpy(Tag->tag_header->Tag, "ID3", 3);
+	Tag->tag_header->MajorVersion = '\x03';
+	Tag->tag_header->MinorVersion = '\x00';
 	Tag->tag_header->flags = '\x00';
 	Tag->tag_header->tag_size = getTagSize(Tag) + Padding;
 
@@ -243,7 +243,7 @@ ID3v2_frame* getTagTitle (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TIT2");
+		return getFromList(Tag->frames, "TIT2");
 	}
 }
 
@@ -252,7 +252,7 @@ ID3v2_frame* getTagArtist (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TPE1");
+		return getFromList(Tag->frames, "TPE1");
 	}
 }
 
@@ -261,7 +261,7 @@ ID3v2_frame* getTagAlbum (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TALB");
+		return getFromList(Tag->frames, "TALB");
 	}
 }
 
@@ -270,7 +270,7 @@ ID3v2_frame* getTagAlbumArtist (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TPE2");
+		return getFromList(Tag->frames, "TPE2");
 	}
 
 	
@@ -281,7 +281,7 @@ ID3v2_frame* getTagGenre (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TCON");
+		return getFromList(Tag->frames, "TCON");
 	}
 }
 
@@ -290,7 +290,7 @@ ID3v2_frame* getTagTrack (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TRCK");
+		return getFromList(Tag->frames, "TRCK");
 	}
 }
 
@@ -299,7 +299,7 @@ ID3v2_frame* getTagYear (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TYER");
+		return getFromList(Tag->frames, "TYER");
 	}
 }
 
@@ -308,7 +308,7 @@ ID3v2_frame* getTagComment (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "COMM");
+		return getFromList(Tag->frames, "COMM");
 	}
 }
 
@@ -317,7 +317,7 @@ ID3v2_frame* getTagDiscNumber (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TPOS");
+		return getFromList(Tag->frames, "TPOS");
 	}
 }
 
@@ -325,7 +325,7 @@ ID3v2_frame* getTagComposer (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "TCOM");
+		return getFromList(Tag->frames, "TCOM");
 	}
 
 	
@@ -336,7 +336,7 @@ ID3v2_frame* getTagAlbumCover (ID3v2_tag* Tag) {
 	if (Tag == NULL) {
 		return NULL;
 	} else {
-		return get_from_list(Tag->frames, "APIC");
+		return getFromList(Tag->frames, "APIC");
 	}
 }
 
@@ -403,7 +403,7 @@ void setTagTitle (char* Title, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* TitleFrame = NULL;
 
 	if (!(TitleFrame = getTagTitle(Tag))) {
-		TitleFrame = new_frame();
+		TitleFrame = initNewFrame();
 		addToList(Tag->frames, TitleFrame);
 	}
 
@@ -415,7 +415,7 @@ void setTagArtist (char* Artist, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* ArtistFrame = NULL;
 	
 	if (!(ArtistFrame = getTagArtist(Tag))) {
-		ArtistFrame = new_frame();
+		ArtistFrame = initNewFrame();
 		addToList(Tag->frames, ArtistFrame);
 	}
 
@@ -427,7 +427,7 @@ void setTagAlbum (char* Album, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* AlbumFrame = NULL;
 	
 	if (!(AlbumFrame = getTagAlbum(Tag))) {
-		AlbumFrame = new_frame();
+		AlbumFrame = initNewFrame();
 		addToList(Tag->frames, AlbumFrame);
 	}
 
@@ -439,7 +439,7 @@ void setTagAlbumArtist (char* AlbumArtist, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* AlbumArtistFrame = NULL;
 
 	if (!(AlbumArtistFrame = getTagAlbumArtist(Tag))) {
-		AlbumArtistFrame = new_frame();
+		AlbumArtistFrame = initNewFrame();
 		addToList(Tag->frames, AlbumArtistFrame);
 	}
 
@@ -451,7 +451,7 @@ void setTagGenre (char* Genre, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* GenreFrame = NULL;
 
 	if (!(GenreFrame = getTagGenre(Tag))) {
-		GenreFrame = new_frame();
+		GenreFrame = initNewFrame();
 		addToList(Tag->frames, GenreFrame);
 	}
 
@@ -463,7 +463,7 @@ void setTagTrack (char* Track, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* TrackFrame = NULL;
 
 	if (!(TrackFrame = getTagTrack(Tag))) {
-		TrackFrame = new_frame();
+		TrackFrame = initNewFrame();
 		addToList(Tag->frames, TrackFrame);
 	}
 
@@ -476,7 +476,7 @@ void setTagYear (char* Year, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* YearFrame = NULL;
 	
 	if (!(YearFrame = getTagYear(Tag))) {
-		YearFrame = new_frame();
+		YearFrame = initNewFrame();
 		addToList(Tag->frames, YearFrame);
 	}
 
@@ -488,7 +488,7 @@ void setTagComment (char* Comment, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* CommentFrame = NULL;
 
 	if (!(CommentFrame = getTagComment(Tag))) {
-		CommentFrame = new_frame();
+		CommentFrame = initNewFrame();
 		addToList(Tag->frames, CommentFrame);
 	}
 
@@ -500,7 +500,7 @@ void setTagDiscNumber (char* DiscNumber, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* DiscNumberFrame = NULL;
 
 	if (!(DiscNumberFrame = getTagDiscNumber(Tag))) {
-		DiscNumberFrame = new_frame();
+		DiscNumberFrame = initNewFrame();
 		addToList(Tag->frames, DiscNumberFrame);
 	}
 
@@ -512,7 +512,7 @@ void setTagComposer (char* Composer, char Encoding, ID3v2_tag* Tag) {
 	ID3v2_frame* ComposerFrame = NULL;
 
 	if (!(ComposerFrame = getTagComposer(Tag))) {
-		ComposerFrame = new_frame();
+		ComposerFrame = initNewFrame();
 		addToList(Tag->frames, ComposerFrame);
 	}
 
@@ -535,7 +535,7 @@ void setTagAlbumCover (const std::string* Filename, ID3v2_tag* Tag) {
 
 	fclose(AlbumCover);
 
-	MIME_Type = get_mime_type_from_filename(Filename);
+	MIME_Type = getMimeTypeFromFilename(Filename);
 	setTagAlbumCoverFromBytes(AlbumCoverBytes, MIME_Type, ImageSize, Tag);
 
 	free(AlbumCoverBytes);
@@ -546,7 +546,7 @@ void setTagAlbumCoverFromBytes (char* AlbumCoverBytes, char* MIME_Type, size_t P
 	ID3v2_frame* AlbumCoverFrame = NULL;
 
 	if (!(AlbumCoverFrame = getTagAlbumCover(Tag))) {
-		AlbumCoverFrame = new_frame();
+		AlbumCoverFrame = initNewFrame();
 		addToList(Tag->frames, AlbumCoverFrame);
 	}
 

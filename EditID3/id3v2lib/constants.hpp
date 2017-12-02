@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
+
 #ifndef ID3V2LIB_CONSTANTS_HPP
 #define ID3V2LIB_CONSTANTS_HPP
 
-/**
- * TAG_HEADER CONSTANTS
- */
+
+// BEGIN TAG_HEADER CONSTANTS
 #define ID3_HEADER 10
 #define ID3_HEADER_TAG 3
 #define ID3_HEADER_VERSION 1
@@ -26,9 +26,8 @@
 #define ID3v24  2
 // END TAG_HEADER CONSTANTS
 
-/**
- * TAG_FRAME CONSTANTS
- */
+
+// BEGIN TAG_FRAME CONSTANTS
 #define ID3_FRAME 10
 #define ID3_FRAME_ID 4
 #define ID3_FRAME_SIZE 4
@@ -46,9 +45,8 @@
 #define UTF_16_ENCODING 1
 // END TAG_FRAME CONSTANTS
 
-/**
- * FRAME IDs
- */
+
+// BEGIN FRAME IDs
 #define TITLE_FRAME_ID "TIT2"
 #define ARTIST_FRAME_ID "TPE1"
 #define ALBUM_FRAME_ID "TALB"
@@ -63,35 +61,33 @@
 // END FRAME IDs
 
 
-/**
- * APIC FRAME CONSTANTS
- */
+// BEGIN APIC FRAME CONSTANTS
 #define ID3_FRAME_PICTURE_TYPE 1
 #define JPG_MIME_TYPE "image/jpeg"
 #define PNG_MIME_TYPE "image/png"
 
 // Picture types:
-#define OTHER 0x00
-#define FILE_ICON 0x01
+#define OTHER           0x00
+#define FILE_ICON       0x01
 #define OTHER_FILE_ICON 0x02
-#define FRONT_COVER 0x03
-#define BACK_COVER 0x04
-#define LEAFLET_PAGE 0x05
-#define MEDIA 0x06
-#define LEAD_ARTIST 0x07
-#define ARTIST 0x08
-#define CONDUCTOR 0x09
-#define BAND 0x0A
-#define COMPOSER 0x0B
-#define LYRICIST 0x0C
-#define RECORDING_LOCATION 0x0D
-#define DURING_RECORDING 0x0E
-#define DURING_PERFORMANCE 0x0F
-#define VIDEO_SCREEN_CAPTURE 0x10
-#define A_BRIGHT_COLOURED_FISH 0x11
-#define ILLUSTRATION 0x12
-#define ARTIST_LOGOTYPE 0x13
-#define PUBLISHER_LOGOTYPE 0x14
+#define FRONT_COVER     0x03
+#define BACK_COVER      0x04
+#define LEAFLET_PAGE    0x05
+#define MEDIA           0x06
+#define LEAD_ARTIST     0x07
+#define ARTIST          0x08
+#define CONDUCTOR       0x09
+#define BAND            0x0A
+#define COMPOSER        0x0B
+#define LYRICIST        0x0C
+#define RECORDING_LOCATION      0x0D
+#define DURING_RECORDING        0x0E
+#define DURING_PERFORMANCE      0x0F
+#define VIDEO_SCREEN_CAPTURE    0x10
+#define A_BRIGHT_COLOURED_FISH  0x11
+#define ILLUSTRATION            0x12
+#define ARTIST_LOGOTYPE         0x13
+#define PUBLISHER_LOGOTYPE      0x14
 // END APIC FRAME CONSTANTS
 
 #endif // ID3V2LIB_CONSTANTS_HPP

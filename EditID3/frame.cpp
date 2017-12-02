@@ -13,8 +13,8 @@
 #include "id3v2lib/constants.hpp"
 
 
-ID3v2_frame* parse_frame (char* Bytes, int32_t Offset, int32_t Version) {
-	ID3v2_frame* Frame = new_frame();
+ID3v2_frame* parseFrame (char* Bytes, int32_t Offset, int32_t Version) {
+	ID3v2_frame* Frame = initNewFrame();
 
 	// Parse frame header:
 	memcpy(Frame->frame_id, (Bytes + Offset), ID3_FRAME_ID);
@@ -26,6 +26,7 @@ ID3v2_frame* parse_frame (char* Bytes, int32_t Offset, int32_t Version) {
 	}
 
 	Frame->size = convertBytesToInteger(Bytes, 4, (Offset += ID3_FRAME_ID));
+
 	if (Version == ID3v24) {
 		Frame->size = syncintDecode(Frame->size);
 	}
@@ -40,7 +41,7 @@ ID3v2_frame* parse_frame (char* Bytes, int32_t Offset, int32_t Version) {
 }
 
 
-int32_t get_frame_type (char* FrameID) {
+int32_t getFrameType (char* FrameID) {
 	switch (FrameID[0]) {
 		case 'T':
 			return TEXT_FRAME;
@@ -54,14 +55,14 @@ int32_t get_frame_type (char* FrameID) {
 }
 
 
-ID3v2_frame_text_content* parse_text_frame_content (ID3v2_frame* Frame) {
-	ID3v2_frame_text_content* Content;
+ID3v2FrameTextContent* parseTextFrameContent (ID3v2_frame* Frame) {
+	ID3v2FrameTextContent* Content;
 
 	if (Frame == NULL) {
 		return NULL;
 	}
 
-	Content = new_text_content(Frame->size);
+	Content = initNewTextContent(Frame->size);
 	Content->encoding = Frame->data[0];
 	Content->size = (Frame->size - ID3_FRAME_ENCODING);
 	memcpy(Content->data, (Frame->data + ID3_FRAME_ENCODING), Content->size);
@@ -70,14 +71,14 @@ ID3v2_frame_text_content* parse_text_frame_content (ID3v2_frame* Frame) {
 }
 
 
-ID3v2_frame_comment_content* parse_comment_frame_content (ID3v2_frame* Frame) {
+ID3v2_frame_comment_content* parseCommentFrameContent (ID3v2_frame* Frame) {
 	ID3v2_frame_comment_content *Content;
 	
 	if (Frame == NULL) {
 		return NULL;
 	}
 
-	Content = new_comment_content(Frame->size);
+	Content = initNewCommentContent(Frame->size);
 
 	Content->text->encoding = Frame->data[0];
 	Content->text->size = (Frame->size - ID3_FRAME_ENCODING - ID3_FRAME_LANGUAGE - ID3_FRAME_SHORT_DESCRIPTION);
@@ -91,19 +92,21 @@ ID3v2_frame_comment_content* parse_comment_frame_content (ID3v2_frame* Frame) {
 }
 
 
-char* parse_mime_type (char* Data, int32_t* I) {
-	char* MIME_Type = (char*) malloc(30 * sizeof(char));
+// TODO: Remove 'static' keyword (and remove function declaration) if
+// it causes issues
+static char* parseMimeType (char* Data, int32_t* I) {
+	char* MimeType = (char*) malloc(30 * sizeof(char));
 
 	while (Data[*I] != '\0') {
-		MIME_Type[*I - 1] = Data[*I];
+		MimeType[*I - 1] = Data[*I];
 		(*I)++;
 	}
 
-	return MIME_Type;
+	return MimeType;
 }
 
 
-ID3v2_frame_apic_content* parse_apic_frame_content (ID3v2_frame* Frame) {
+ID3v2_frame_apic_content* parseApicFrameContent (ID3v2_frame* Frame) {
 	ID3v2_frame_apic_content *Content;
 	
 	// Skip ID3_FRAME_ENCODING:
@@ -113,11 +116,11 @@ ID3v2_frame_apic_content* parse_apic_frame_content (ID3v2_frame* Frame) {
 		return NULL;
 	}
 
-	Content = new_apic_content();
+	Content = initNewApicContent();
 
 	Content->encoding = Frame->data[0];
 
-	Content->mime_type = parse_mime_type(Frame->data, &i);
+	Content->mime_type = parseMimeType(Frame->data, &i);
 	Content->picture_type = Frame->data[++i];
 	Content->description = &Frame->data[++i];
 

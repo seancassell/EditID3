@@ -15,11 +15,11 @@
 #include "utils.hpp"
 
 
-int32_t has_id3v2tag(ID3v2_header* TagHeader);
-int32_t _has_id3v2tag(char* RawHeader);
-ID3v2_header* get_tag_header(const std::string* Filename);
-ID3v2_header* get_tag_header_with_buffer(char* Buffer, size_t Length);
-int32_t get_tag_version(ID3v2_header* TagHeader);
-void edit_tag_size(ID3v2_tag* Tag);
+bool hasID3v2Tag(ID3v2Header* TagHeader);
+bool __hasID3v2Tag(char* RawHeader);
+ID3v2Header* getTagHeader(const std::string* Filename);
+ID3v2Header* getTagHeaderWithBuffer(char* Buffer, size_t Length);
+int32_t getTagVersion(ID3v2Header* TagHeader);
+void editTagSize(ID3v2_tag* Tag);
 
 #endif // ID3V2LIB_HEADER_HPP

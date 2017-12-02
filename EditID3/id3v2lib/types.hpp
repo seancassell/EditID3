@@ -15,26 +15,26 @@
 
 // Data structures:
 typedef struct {
-	char tag[ID3_HEADER_TAG];
-	char major_version;
-	char minor_version;
+	char Tag[ID3_HEADER_TAG];
+	char MajorVersion;
+	char MinorVersion;
 	char flags;
 	size_t tag_size;
 	size_t extended_header_size;
-} ID3v2_header;
+} ID3v2Header;
 
 
 typedef struct {
 	size_t size;
 	char encoding;
 	char* data;
-} ID3v2_frame_text_content;
+} ID3v2FrameTextContent;
 
 
 typedef struct {
 	char* language;
 	char* short_description;
-	ID3v2_frame_text_content* text;
+	ID3v2FrameTextContent* text;
 } ID3v2_frame_comment_content;
 
 
@@ -66,18 +66,18 @@ typedef struct _ID3v2_frame_list {
 
 typedef struct {
 	char* raw;
-	ID3v2_header* tag_header;
+	ID3v2Header* tag_header;
 	ID3v2_frame_list* frames;
 } ID3v2_tag;
 
 
 // Constructor functions:
-ID3v2_header* new_header();
-ID3v2_tag* new_tag();
-ID3v2_frame* new_frame();
-ID3v2_frame_list* new_frame_list();
-ID3v2_frame_text_content* new_text_content(size_t Size);
-ID3v2_frame_comment_content* new_comment_content(size_t size);
-ID3v2_frame_apic_content* new_apic_content();
+ID3v2Header* initNewHeader();
+ID3v2_tag* initNewTag();
+ID3v2_frame* initNewFrame();
+ID3v2_frame_list* initNewFrameList();
+ID3v2FrameTextContent* initNewTextContent(size_t Size);
+ID3v2_frame_comment_content* initNewCommentContent(size_t size);
+ID3v2_frame_apic_content* initNewApicContent();
 
 #endif // ID3V2LIB_TYPES_HPP

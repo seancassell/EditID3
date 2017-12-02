@@ -84,7 +84,7 @@ void addToList (ID3v2_frame_list* Main, ID3v2_frame* Frame) {
 		Main->last = Main;
 		Main->frame = Frame;
 	} else {
-		Current = new_frame_list();
+		Current = initNewFrameList();
 		Current->frame = Frame;
 		Current->start = Main->start;
 		Main->last->next = Current;
@@ -93,42 +93,42 @@ void addToList (ID3v2_frame_list* Main, ID3v2_frame* Frame) {
 }
 
 
-ID3v2_frame* get_from_list (ID3v2_frame_list* list, char* frame_id) {
-	while ((list != NULL) && (list->frame != NULL)) {
-		if (strncmp(list->frame->frame_id, frame_id, 4) == 0) {
-			return list->frame;
+ID3v2_frame* getFromList (ID3v2_frame_list* List, char* FrameID) {
+	while ((List != NULL) && (List->frame != NULL)) {
+		if (strncmp(List->frame->frame_id, FrameID, 4) == 0) {
+			return List->frame;
 		}
-		list = list->next;
+		List = List->next;
 	}
 	return NULL;
 }
 
 
-void free_tag (ID3v2_tag* tag) {
-	ID3v2_frame_list *list;
+void freeTag (ID3v2_tag* Tag) {
+	ID3v2_frame_list *List;
 
-	free(tag->raw);
-	free(tag->tag_header);
-	list = tag->frames;
+	free(Tag->raw);
+	free(Tag->tag_header);
+	List = Tag->frames;
 
-	while (list != NULL) {
-		if (list->frame) {
-			free(list->frame->data);
+	while (List != NULL) {
+		if (List->frame) {
+			free(List->frame->data);
 		}
 
-		free(list->frame);
-		list = list->next;
+		free(List->frame);
+		List = List->next;
 	}
 
-	free(list);
-	free(tag);
+	free(List);
+	free(Tag);
 }
 
 
-char* get_mime_type_from_filename (const std::string* Filename) {
-	const char* TempFilename = Filename->c_str();
+char* getMimeTypeFromFilename (const std::string* Filename) {
+	//const char* TempFilename = Filename->c_str();
 
-	if (strcmp(strrchr(TempFilename, '.') + 1, "png") == 0) {
+	if (strcmp(strrchr(Filename->c_str(), '.') + 1, "png") == 0) {
 		return PNG_MIME_TYPE;
 	} else {
 		return JPG_MIME_TYPE;
@@ -137,7 +137,8 @@ char* get_mime_type_from_filename (const std::string* Filename) {
 
 
 // String functions:
-int32_t has_bom (uint16_t* String) {
+int32_t hasByteOrderMark (uint16_t* String) {
+	// Check if 'String' has a byte order mark:
 	if (memcmp("\xFF\xFE", String, 2) == 0 || memcmp("\xFE\xFF", String, 2) == 0) {
 		return 1;
 	} else {
@@ -146,16 +147,16 @@ int32_t has_bom (uint16_t* String) {
 }
 
 
-uint16_t* char_to_utf16 (std::string* String, size_t Size) {
-	const char* str = String->c_str();
+uint16_t* convertCharToUTF16 (std::string* String, size_t Size) {
+	//const char* str = String->c_str();
 	uint16_t* Result = (uint16_t*) malloc(Size * sizeof(uint16_t));
-	memcpy(Result, str, Size);
+	memcpy(Result, String->c_str(), Size);
 	return Result;
 }
 
 
-void println_utf16(uint16_t* String, size_t Size) {
-	// Skip the BOM:
+void printLineUTF16(uint16_t* String, size_t Size) {
+	// Skip the byte order mark:
 	int i = 1;
 
 	while (1) {
@@ -174,10 +175,10 @@ void println_utf16(uint16_t* String, size_t Size) {
 }
 
 
-char* get_path_to_file(std::string* Filename) {
+char* getPathToFile(std::string* Filename) {
 	const char* file = Filename->c_str();
-	char* FileName = strrchr(file, '/');
-	size_t size = strlen(file) - strlen(FileName) + 1; // 1 = trailing '/'
+	char* FileName = strrchr(Filename->c_str(), '/');
+	size_t size = strlen(Filename->c_str()) - strlen(FileName) + 1; // 1 = trailing '/'
 
 	char* file_path = (char*) malloc(size * sizeof(char));
 	strncpy(file_path, file, size);
